@@ -20,6 +20,11 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;        // set our port
 
+// serve files in static' folder at root URL '/'
+//app.use('/app3', express.static('static'));
+app.use('/app3',express.static(__dirname));
+
+
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
@@ -32,9 +37,9 @@ router.use(function(req, res, next) {
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
-});
+// router.get('/', function(req, res) {
+//     res.json({ message: 'hooray! welcome to our api!' });   
+// });
 // <-- route middleware and first route are here
 
 // more routes for our API will happen here
@@ -118,7 +123,7 @@ router.route('/bears/:bear_id')
     
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
-app.use('/bearapp', router);
+app.use('/app3', router);
 
 // START THE SERVER
 // =============================================================================
