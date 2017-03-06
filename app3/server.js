@@ -30,14 +30,14 @@ app.use('/app3',express.static(__dirname));
 // =============================================================================
 
 
-// var router = express.Router();              // get an instance of the express Router
+var router = express.Router();              // get an instance of the express Router
 
-// // middleware to use for all requests
-// router.use(function(req, res, next) {
-//     // do logging
-//     console.log('Something is happening.');
-//     next(); // make sure we go to the next routes and don't stop here
-// });
+// middleware to use for all requests
+router.use(function(req, res, next) {
+    // do logging
+    console.log('Something is happening.');
+    next(); // make sure we go to the next routes and don't stop here
+});
 
 // // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 // // router.get('/', function(req, res) {
@@ -167,7 +167,7 @@ app.use('/app3',express.static(__dirname));
 // =============================================================================
 
 app.get('/', (req, res) => {
-	res.send('Please use /app3/bears');
+	res.send('Please use /app3');
 });
 
 
@@ -180,7 +180,7 @@ app.get('/app3/bears', (req, res) => {
 	});
 });
 
-app.get('/app3/bears/_id', (req, res) => {
+app.get('/app3/bears/:_id', (req, res) => {
 	Bear.getBearById(req.params._id, (err, bear) => {
 		if(err){
 			throw err;
@@ -199,8 +199,9 @@ app.post('/app3/bears', (req, res) => {
 	});
 });
 
-app.put('/app3/bears/:bear_id', (req, res) => {
-	var id = req.params.bear_id;
+
+app.put('/app3/bears/:_id', (req, res) => {
+	var id = req.params._id;
 	var bear = req.body;
 	Bear.updateBear(id, bear, {}, (err, bear) => {
 		if(err){
@@ -210,7 +211,37 @@ app.put('/app3/bears/:bear_id', (req, res) => {
 	});
 });
 
+app.delete('/app3/bears/:_id', (req, res) => {
+	var id = req.params._id;
+	Bear.removeBear(id, (err, bear) => {
+		if(err){
+			throw err;
+		}
+		res.json(bear);
+	});
+});
 
+// router.route('/app3/bears/:_id')
+// 	.delete((req, res) => {
+// 	var id = req.params._id;
+// 	Bear.removeBear({_id: id}, (err, bear) => {
+// 		if(err){
+// 			throw err;
+// 		}
+// 		res.json(bear);
+// 	});
+// });
+
+// app.delete('/app3/brars/:_id',function(req, res) {
+//     Bear.remove({
+//         _id: req.params._id
+//     }, function(err, bear) {
+//         if (err)
+//             res.send(err);
+
+//         res.json({ message: 'Successfully deleted' });
+//     });
+// });
 
 app.listen(port);
 console.log('Magic happens on port ' + port);

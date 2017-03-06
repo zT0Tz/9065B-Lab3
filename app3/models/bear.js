@@ -1,10 +1,10 @@
 
 
-const mongoose     = require('mongoose');
-//var Schema       = mongoose.Schema;
+var mongoose     = require('mongoose');
+var Schema       = mongoose.Schema;
 
-//var BearSchema   = new Schema({
-const BearSchema   = mongoose.Schema({
+var BearSchema   = new Schema({
+//const BearSchema   = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -20,7 +20,7 @@ const BearSchema   = mongoose.Schema({
     },
     
     age:{
-        type: Number,
+        type: String
     },
     
     img_url:{
@@ -38,16 +38,19 @@ const Bear = module.exports = mongoose.model('Bear', BearSchema);
 // Get Bears
 module.exports.getBears = (callback, limit) => {
         Bear.find(callback).limit(limit);
-}
+};
+
 // Get Bear
 module.exports.getBearById = (id, callback) => {
         Bear.findById(id,callback);
-}
+};
+
 // Add Bear
 module.exports.addBear = (bear, callback) => {
         Bear.create(bear,callback);
-}
+};
 
+//Update Bear
 module.exports.updateBear = (id, bear, options, callback) => {
 	var query = {_id: id};
 	var update = {
@@ -56,8 +59,12 @@ module.exports.updateBear = (id, bear, options, callback) => {
 		gender: bear.gender,
 		age: bear.age,
 		img_url: bear.img_url,
-	}
+	};
 	Bear.findOneAndUpdate(query, update, options, callback);
-}    
+};   
     
-    
+// Delete Bear
+module.exports.removeBear = (id, callback) => {
+	var query = {_id: id};
+	Bear.remove(query, callback);
+};   
